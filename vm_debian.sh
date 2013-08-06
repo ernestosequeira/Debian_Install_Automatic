@@ -91,9 +91,9 @@ create_new_iso(){
 	local path_iso_final="$1"
 	local path_new_iso="$2"
 	local iso_new="$3"
-	sudo aptitude install genisoimage -y
-	sudo mkdir -p ${path_iso_final}
-	sudo mkisofs -r -b isolinux/isolinux.bin -c isolinux/boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table -o ${path_iso_final}/${iso_new}.iso /${path_new_iso}
+	aptitude install genisoimage -y
+	mkdir -p ${path_iso_final}
+	mkisofs -r -b isolinux/isolinux.bin -c isolinux/boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table -o ${path_iso_final}/${iso_new}.iso /${path_new_iso}
 	rm -rf ${path_new_iso}
 	echo ">> Done."
 }
