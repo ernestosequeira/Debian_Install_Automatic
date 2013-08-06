@@ -1,0 +1,4 @@
+#Execute linux
+sudo chmod +x vm_debian.sh
+sudo ./vm_debian.sh
+
