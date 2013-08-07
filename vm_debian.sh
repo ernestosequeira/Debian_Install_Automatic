@@ -194,7 +194,7 @@ create_vm(){
 
 #function calls
 
-#download_debian_pressed $PATH_FILES ${ISO_DEBIAN} ${CFG_PRESEES}
+download_debian_pressed $PATH_FILES ${ISO_DEBIAN} ${CFG_PRESEES}
 
 mount_iso ${ISO_FILE} ${PATH_MOUNT} ${GREEN}
 
@@ -208,5 +208,5 @@ create_new_iso  ${PATH_ISO_FINAL} ${PATH_NEW_ISO} ${ISO_NEW}
 
 create_vm ${VM_NAME} ${VM_MEM} ${VM_DISK_NAME} ${ISO_NEW} ${VM_SIZE} ${PATH_NEW_ISO} ${PATH_ISO_FINAL} ${PATH_VM}
 
-echo -e "${txtgrn}\n>> Finnished.${txtgrn}"
+message "\n>> Finnished.." ${GREEN}
 exit 0
