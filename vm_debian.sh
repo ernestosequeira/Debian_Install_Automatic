@@ -11,9 +11,11 @@ ISO_FILE=/mnt/files/debian-7.1.0-i386-netinst.iso
 PATH_MOUNT=/mnt/deb_mount
 
 PATH_NEW_ISO=/mnt/iso
-PATH_ISOLINUX=/mnt/iso/isolinux
 
+
+PATH_ISOLINUX=/mnt/iso/isolinux
 PATH_ISO_FINAL=/mnt/files/disk
+PATH_VM=/home/$USER/VirtualBox VMs
 
 ISO_NEW=trytoniso
 
@@ -107,6 +109,8 @@ create_vm(){
 	local vm_size="$5"
 	local path_new_iso="$6"
 	local path_iso_final="$7"
+	local path_vm="$8"
+	
 
 	echo "Enter type of virtualizer (vbox or qemu):"
 	read r
@@ -122,9 +126,9 @@ create_vm(){
 
 			# add disk
 			mkdir -p ${path_new_iso}
-			VBoxManage createhd --filename ${path_new_iso}/${vm_disk_name}.vdi --size ${vm_size}
+			VBoxManage createhd --filename ${path_vm}/${vm_disk_name}.vdi --size ${vm_size}
 			VBoxManage storagectl ${vm_name} --name "IDE Controller" --add ide
-			VBoxManage storageattach ${vm_name} --storagectl "IDE Controller" --port 0 --device 0 --type hdd --medium ${path_new_iso}/${vm_disk_name}.vdi
+			VBoxManage storageattach ${vm_name} --storagectl "IDE Controller" --port 0 --device 0 --type hdd --medium ${path_vm}/${vm_disk_name}.vdi
 			VBoxManage storageattach ${vm_name} --storagectl "IDE Controller" --port 1 --device 0 --type dvddrive --medium ${path_iso_final}/${iso_new}.iso
 			echo ">> Done."
 
@@ -138,7 +142,7 @@ create_vm(){
 			
 			#add disk
 			mkdir -p ${path_new_iso}
-			qemu-img create -f qcow2 -o preallocation=metadata ${path_new_iso}/${vm_disk_name}.qcow2 ${vm_size}M
+			qemu-img create -f qcow2 -o preallocation=metadata ${path_vm}/${vm_disk_name}.qcow2 ${vm_size}M
 
 			#start Installation
 			virt-install \
@@ -148,7 +152,7 @@ create_vm(){
 			--hvm \
 			--virt-type=kvm \
 			--cdrom=${path_iso_final}/${iso_new}.iso \
-			--file=${path_new_iso}/${vm_disk_name}.qcow2 \
+			--file=${path_vm}/${vm_disk_name}.qcow2 \
 			--graphics vnc,keymap=es
 			echo ">> Done."
 		fi
@@ -170,7 +174,7 @@ change_txt_cfg ${PATH_ISOLINUX}
 
 create_new_iso  ${PATH_ISO_FINAL} ${PATH_NEW_ISO} ${ISO_NEW}
 
-create_vm ${VM_NAME} ${VM_MEM} ${VM_DISK_NAME} ${ISO_NEW} ${VM_SIZE} ${PATH_NEW_ISO} ${PATH_ISO_FINAL}
+create_vm ${VM_NAME} ${VM_MEM} ${VM_DISK_NAME} ${ISO_NEW} ${VM_SIZE} ${PATH_NEW_ISO} ${PATH_ISO_FINAL} ${PATH_VM}
 
 echo -e "\n>> Finnished."
 exit 0
